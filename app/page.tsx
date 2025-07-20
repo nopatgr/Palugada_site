@@ -51,6 +51,7 @@ import { serviceManager } from "@/lib/service-management";
 import type { Service } from "@/lib/definitions";
 import { useRouter } from "next/navigation";
 import { ProcessTimeline } from "@/components/process-timeline";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
@@ -257,12 +258,17 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
-        {/* Animated Background */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
-
+        {/* Background Video */}
+        <video
+          className="absolute top-0 left-0 w-full h-full object-cover z-0 scale-[1.2] translate-x-[0%] translate-y-[42%]"
+          autoPlay
+          muted
+          loop
+          playsInline
+        >
+          <source src="/videos/blackhole.webm" type="video/webm" />
+          Your browser does not support the video tag.
+        </video>
         <div className="relative max-w-7xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -313,20 +319,6 @@ export default function LandingPage() {
               View Services
             </Button>
           </motion.div>
-          <video
-            className="w-full h-auto"
-            autoPlay
-            muted
-            loop
-            playsInline
-            style={{
-              maxHeight: "70vh", // Batas tinggi maksimal
-              // objectFit: "cover",
-            }}
-          >
-            <source src="/videos/blackhole.webm" type="video/webm" />
-            Your browser does not support the video tag.
-          </video>
         </div>
       </section>
 
@@ -338,7 +330,7 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="relative z-10 text-center mb-16 text-white px-4 py-8"
           >
             <h2 className="text-4xl sm:text-5xl font-bold mb-4">
               <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
@@ -676,20 +668,33 @@ export default function LandingPage() {
               <ul className="space-y-3 text-slate-400">
                 <li className="flex items-center">
                   <Mail className="h-5 w-5 mr-2" />
-                  <span>info@digitalpro.com</span>
+                  <a
+                    href="mailto:service@palugada.biz.id"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                  >
+                    service@palugada.biz.id
+                  </a>
                 </li>
                 <li className="flex items-center">
                   <Phone className="h-5 w-5 mr-2" />
-                  <span>+1 (555) 123-4567</span>
+                  <a
+                    href="https://wa.me/6285777101676?text=Halo%20saya%20tertarik%20dengan%20layanan%20Anda"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                  >
+                    +6285777101676
+                  </a>
                 </li>
                 <li className="flex items-center">
                   <MapPin className="h-5 w-5 mr-2" />
-                  <span>New York, NY</span>
+                  <span>Bekasi, Indonesia</span>
                 </li>
               </ul>
             </div>
           </div>
-
           <div className="border-t border-slate-800 mt-8 pt-8 text-center text-slate-400">
             <p>
               &copy; {new Date().getFullYear()} DigitalPro. All rights reserved.
