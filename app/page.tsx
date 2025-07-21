@@ -42,7 +42,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
-import { MultiServiceSelector } from "@/components/multi-service-selector";
+import { MultiServiceSelector } from "@/components/mrvice-selector";
 import { useToast } from "@/components/ui/toast";
 import { bookingStorage } from "@/lib/booking-storage";
 import { emailService } from "@/lib/email-service";
@@ -209,9 +209,9 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white overflow-x-hidden">
+    <div className="min-h-screen text-white  bg-red-500">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
+      <nav className="fixed top-0 w-full z-50 bg-slate-950/70 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -253,14 +253,14 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-        </div>
+      </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-white">
         {/* Background Video */}
         <video
-          className="absolute top-0 left-0 w-full h-full object-cover z-0 scale-[1.2] translate-x-[0%] translate-y-[42%]"
+          className="pointer-events-none  top-0 left-0 w-full h-full object-cover z-0 scale-[1.2] translate-x-[0%] translate-y-[42%]"
           autoPlay
           muted
           loop
@@ -269,7 +269,8 @@ export default function LandingPage() {
           <source src="/videos/blackhole.webm" type="video/webm" />
           Your browser does not support the video tag.
         </video>
-        <div className="relative max-w-7xl mx-auto text-center">
+
+        <div className="relative max-w-7xl mx-auto text-center mt-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -330,7 +331,7 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="relative z-10 text-center mb-16 text-white px-4 py-8"
+            className="relative z-10 text-center mb-16 text-white px-4 py-8 bg-slate-300"
           >
             <h2 className="text-4xl sm:text-5xl font-bold mb-4">
               <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">

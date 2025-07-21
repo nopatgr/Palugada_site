@@ -11,9 +11,7 @@ export const metadata: Metadata = {
   title: "Palugada Solution Service",
   description:
     "Professional digital solutions for your everyday needs. OS installation, software setup, technical support, CV writing, academic writing, and web development.",
-    generator: 'v0.dev'
 }
-
 export default function RootLayout({
   children,
 }: {
@@ -21,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-[#030014] overflow-y-scroll overflow-x-hidden`}>
         <ToastProvider>
           <AdminProvider>{children}</AdminProvider>
         </ToastProvider>
