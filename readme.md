@@ -1,4 +1,4 @@
 ### baru kaya gini lerr wkwk
 
-##### 'https://palugada-site.vercel.app/`
+##### https://palugada-site.vercel.app/
 
