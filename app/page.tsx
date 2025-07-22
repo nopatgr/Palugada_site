@@ -39,16 +39,23 @@ import {
   Linkedin,
   Instagram,
 } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
-import { MultiServiceSelector } from "@/components/mrvice-selector";
+import { MultiServiceSelector } from "@/components/multi-service-selector";
 import { useToast } from "@/components/ui/toast";
 import { bookingStorage } from "@/lib/booking-storage";
 import { emailService } from "@/lib/email-service";
 import { timezoneUtils } from "@/lib/timezone-utils";
 import { serviceManager } from "@/lib/service-management";
-import type { Service } from "@/lib/definitions";
+import type { Service } from "@/lib/services";
 import { useRouter } from "next/navigation";
 import { ProcessTimeline } from "@/components/process-timeline";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -209,7 +216,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen text-white  bg-red-500">
+    <div className="h-screen bg-gradient-to-b from-[#1a0033] via-[#030014] to-black">
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-slate-950/70 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -224,8 +231,8 @@ export default function LandingPage() {
                 </span>
               </div>
             </div>
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-8">
+            <div className="w-[500px] h-full flex flex-row items-center justify-between md:mr-20">
+              <div className="flex items-center justify-between w-full h-auto border border-[#7042f861] bg-[#0300145e] mr-[15px] px-[20px] py-[10px] rounded-full text-gray-200">
                 <a
                   href="#services"
                   className="hover:text-blue-400 transition-colors"
@@ -257,26 +264,26 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="relative flex flex-col  w-full mt-48 object-cover">
         {/* Background Video */}
         <video
-          className="pointer-events-none  top-0 left-0 w-full h-full object-cover z-0 scale-[1.2] translate-x-[0%] translate-y-[42%]"
+          className="rotate-180 absolute top-[-658px] w-full left-0 z-1 object-cover "
           autoPlay
           muted
           loop
           playsInline
         >
           <source src="/videos/blackhole.webm" type="video/webm" />
-          Your browser does not support the video tag.
+          
         </video>
 
-        <div className="relative max-w-7xl mx-auto text-center mt-20">
+        <div className="relative w-full mx-auto text-center mt-24 pb-20 bg-transparent z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl sm:text-6xl lg:text-5xl font-bold mb-6">
+            <h1 className="text-4xl sm:text-6xl lg:text-5xl font-bold mb-8">
               <span className="bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent">
                 Palugada Solution Service
               </span>
@@ -324,14 +331,14 @@ export default function LandingPage() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 px-4 sm:px-6 lg:px-8">
+      <section id="services" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#030014] via-[#1a0033] to-black">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="relative z-10 text-center mb-16 text-white px-4 py-8 bg-slate-300"
+            className="relative z-10 text-center mb-16 text-white px-4 py-8 "
           >
             <h2 className="text-4xl sm:text-5xl font-bold mb-4">
               <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
@@ -409,10 +416,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
+      {/* Blog Choose Us Section */}
       <section
         id="about"
-        className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-900/30"
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#030014] via-[#1a0033] to-black"
       >
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -423,7 +430,7 @@ export default function LandingPage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl sm:text-5xl font-bold mb-4">
-              Why Choose{" "}
+              Blog{" "}
               <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
                 DigitalPro
               </span>
@@ -434,49 +441,60 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+            <Carousel className="w-full max-w-6xl mx-auto">
+  <CarouselContent>
+    {/* Slide Pertama */}
+    <CarouselItem>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="bg-white rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300"
           >
-            {[
-              {
-                icon: Zap,
-                title: "Lightning Fast",
-                description:
-                  "Quick turnaround times without compromising on quality",
-              },
-              {
-                icon: Shield,
-                title: "Trusted & Secure",
-                description: "Your data and privacy are our top priorities",
-              },
-              {
-                icon: Users,
-                title: "Expert Team",
-                description:
-                  "Certified professionals with years of industry experience",
-              },
-            ].map((benefit, index) => (
-              <motion.div key={index} variants={fadeInUp}>
-                <div className="text-center group">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <benefit.icon className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-semibold mb-4 text-white">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-slate-400 text-lg">
-                    {benefit.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+            <img
+              src="/test.jpg"
+              alt="test"
+              className="w-full h-64 object-cover"
+            />
+            <div className="p-1 text-center bg-gradient-to-b from-gray-700 via-gray-900 to-black text-white">
+              <h3 className="text-lg font-semibold">Produk {i}</h3>
+              <p className="text-sm text-gray-500">Deskripsi singkat produk</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </CarouselItem>
+
+    {/* Slide Kedua */}
+    <CarouselItem>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
+        {[4, 5, 6].map((i) => (
+          <div
+            key={i}
+            className="bg-white rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300"
+          >
+            <img
+              src={`/produk${i}.jpg`}
+              alt={`Produk ${i}`}
+              className="w-full h-64 object-cover"
+            />
+            <div className="p-4">
+              <h3 className="text-lg font-semibold">Produk {i}</h3>
+              <p className="text-sm text-gray-500">Deskripsi singkat produk</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </CarouselItem>
+  </CarouselContent>
+
+  <CarouselPrevious className="bg-white text-black shadow-md hover:bg-gray-100" />
+  <CarouselNext className="bg-white text-black shadow-md hover:bg-gray-100" />
+</Carousel>
+
+        
         </div>
-      </section>
+        </section>
 
       {/* Process Timeline Section */}
       <ProcessTimeline />
@@ -827,7 +845,7 @@ export default function LandingPage() {
                               <SelectItem
                                 key={time}
                                 value={time}
-                                disabled={isBooked}
+                                disabled={!!isBooked}
                                 className={`text-white hover:bg-slate-700 ${
                                   isBooked
                                     ? "opacity-50 cursor-not-allowed"
@@ -1054,4 +1072,4 @@ export default function LandingPage() {
       </Dialog>
     </div>
   );
-}
+};

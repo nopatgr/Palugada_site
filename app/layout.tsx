@@ -18,6 +18,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+    <>
     <html lang="en">
       <body className={`${inter.className} bg-[#030014] overflow-y-scroll overflow-x-hidden`}>
         <ToastProvider>
@@ -25,5 +26,6 @@ export default function RootLayout({
         </ToastProvider>
       </body>
     </html>
+    </>
   )
 }
