@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Calendar, Clock, CheckCircle, X } from "lucide-react";
+import { Calendar, Clock, CheckCircle, X, Menu } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -45,7 +45,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel"
+} from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
@@ -55,7 +55,7 @@ import { bookingStorage } from "@/lib/booking-storage";
 import { emailService } from "@/lib/email-service";
 import { timezoneUtils } from "@/lib/timezone-utils";
 import { serviceManager } from "@/lib/service-management";
-import type { Service } from "@/lib/services";
+import { Service } from "@/lib/services";
 import { useRouter } from "next/navigation";
 import { ProcessTimeline } from "@/components/process-timeline";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -73,6 +73,118 @@ const staggerContainer = {
     },
   },
 };
+
+// ✅ Tambahkan komponen Navbar di atas
+function Navbar({ handleLogoClick }: { handleLogoClick: () => void }) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        setShowNavbar(false);
+      } else {
+        setShowNavbar(true);
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
+  return (
+    <nav
+      className={`fixed top-0 left-0 w-full z-50 bg-slate-950/70 backdrop-blur-md border-b border-slate-800 transition-transform duration-300 ${showNavbar ? "translate-y-0" : "-translate-y-full"
+        }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <div className="flex items-center">
+            <span
+              className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent cursor-pointer select-none"
+              onClick={handleLogoClick}
+            >
+              DigitalPro
+            </span>
+          </div>
+
+          {/* Desktop Menu */}
+          <div className="hidden md:flex space-x-8 text-gray-200">
+            <a
+              href="#services"
+              className="hover:text-blue-400 transition-colors"
+            >
+              Services
+            </a>
+            <a href="#about" className="hover:text-blue-400 transition-colors">
+              About
+            </a>
+            <a
+              href="#testimonials"
+              className="hover:text-blue-400 transition-colors"
+            >
+              Testimonials
+            </a>
+            <a
+              href="#contact"
+              className="hover:text-blue-400 transition-colors"
+            >
+              Contact
+            </a>
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-gray-200 focus:outline-none"
+            >
+              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden px-4 pb-4 space-y-2 bg-slate-950/90 text-gray-200">
+          <a
+            href="#services"
+            className="block hover:text-blue-400"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Services
+          </a>
+          <a
+            href="#about"
+            className="block hover:text-blue-400"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            About
+          </a>
+          <a
+            href="#testimonials"
+            className="block hover:text-blue-400"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Testimonials
+          </a>
+          <a
+            href="#contact"
+            className="block hover:text-blue-400"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Contact
+          </a>
+        </div>
+      )}
+    </nav>
+  );
+}
 
 export default function LandingPage() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -218,63 +330,19 @@ export default function LandingPage() {
   return (
     <div className="h-screen bg-gradient-to-b from-[#1a0033] via-[#030014] to-black">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-slate-950/70 backdrop-blur-md border-b border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <span
-                  className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent cursor-pointer select-none"
-                  onClick={handleLogoClick}
-                >
-                  DigitalPro
-                </span>
-              </div>
-            </div>
-            <div className="w-[500px] h-full flex flex-row items-center justify-between md:mr-20">
-              <div className="flex items-center justify-between w-full h-auto border border-[#7042f861] bg-[#0300145e] mr-[15px] px-[20px] py-[10px] rounded-full text-gray-200">
-                <a
-                  href="#services"
-                  className="hover:text-blue-400 transition-colors"
-                >
-                  Services
-                </a>
-                <a
-                  href="#about"
-                  className="hover:text-blue-400 transition-colors"
-                >
-                  About
-                </a>
-                <a
-                  href="#testimonials"
-                  className="hover:text-blue-400 transition-colors"
-                >
-                  Testimonials
-                </a>
-                <a
-                  href="#contact"
-                  className="hover:text-blue-400 transition-colors"
-                >
-                  Contact
-                </a>
-              </div>
-            </div>
-          </div>
-      </div>
-      </nav>
 
+      <Navbar handleLogoClick={handleLogoClick} />
       {/* Hero Section */}
-      <section className="relative flex flex-col  w-full mt-48 object-cover">
+      <section className="relative flex flex-col w-full mt-48">
         {/* Background Video */}
         <video
-          className="rotate-180 absolute top-[-658px] w-full left-0 z-1 object-cover "
+          className="rotate-180 absolute top-[-200px] object-cover sm:top-[-468px] md:top-[-558]"
           autoPlay
           muted
           loop
           playsInline
         >
           <source src="/videos/blackhole.webm" type="video/webm" />
-          
         </video>
 
         <div className="relative w-full mx-auto text-center mt-24 pb-20 bg-transparent z-10">
@@ -331,7 +399,10 @@ export default function LandingPage() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#030014] via-[#1a0033] to-black">
+      <section
+        id="services"
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#030014] via-[#1a0033] to-black"
+      >
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -417,11 +488,8 @@ export default function LandingPage() {
       </section>
 
       {/* Blog Choose Us Section */}
-      <section
-        id="about"
-        className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#030014] via-[#1a0033] to-black"
-      >
-        <div className="max-w-7xl mx-auto">
+      <section id="about" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#f7f8f6]">
+        <div className="w-full mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -429,9 +497,9 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold mb-4">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-slate-900">
               Blog{" "}
-              <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent ">
                 DigitalPro
               </span>
             </h2>
@@ -441,60 +509,57 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
-            <Carousel className="w-full max-w-6xl mx-auto">
-  <CarouselContent>
-    {/* Slide Pertama */}
-    <CarouselItem>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
-        {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="bg-white rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300"
-          >
-            <img
-              src="/test.jpg"
-              alt="test"
-              className="w-full h-64 object-cover"
-            />
-            <div className="p-1 text-center bg-gradient-to-b from-gray-700 via-gray-900 to-black text-white">
-              <h3 className="text-lg font-semibold">Produk {i}</h3>
-              <p className="text-sm text-gray-500">Deskripsi singkat produk</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </CarouselItem>
+          <Carousel className="mx-auto">
+            <CarouselItem className="w-full">
+              <div className="w-full px-4 sm:px-6 lg:px-8">
+                {/* Grid responsive: 1 kolom di mobile, 2 di tablet, 3 di desktop */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 
-    {/* Slide Kedua */}
-    <CarouselItem>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
-        {[4, 5, 6].map((i) => (
-          <div
-            key={i}
-            className="bg-white rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300"
-          >
-            <img
-              src={`/produk${i}.jpg`}
-              alt={`Produk ${i}`}
-              className="w-full h-64 object-cover"
-            />
-            <div className="p-4">
-              <h3 className="text-lg font-semibold">Produk {i}</h3>
-              <p className="text-sm text-gray-500">Deskripsi singkat produk</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </CarouselItem>
-  </CarouselContent>
+                  {/* Produk 1 */}
+                  <div className="w-full bg-white rounded-2xl shadow-xl overflow-hidden transform transition-transform duration-300 hover:scale-105">
+                    <img
+                      src="/test.jpg"
+                      alt="test"
+                      className="w-full h-52 sm:h-60 md:h-64 object-cover"
+                    />
+                    <div className="p-4 text-center bg-gradient-to-b from-gray-800 via-gray-900 to-black text-white">
+                      <h3 className="text-xl font-bold mb-1"> Anti Virus </h3>
+                      <p className="text-sm text-gray-300">Mencegah Terjadinya </p>
+                    </div>
+                  </div>
 
-  <CarouselPrevious className="bg-white text-black shadow-md hover:bg-gray-100" />
-  <CarouselNext className="bg-white text-black shadow-md hover:bg-gray-100" />
-</Carousel>
+                  {/* Produk 2 */}
+                  <div className="w-full bg-white rounded-2xl shadow-xl overflow-hidden transform transition-transform duration-300 hover:scale-105">
+                    <img
+                      src="/produk2.jpg"
+                      alt="test"
+                      className="w-full h-52 sm:h-60 md:h-64 object-cover"
+                    />
+                    <div className="p-4 text-center bg-gradient-to-b from-gray-800 via-gray-900 to-black text-white">
+                      <h3 className="text-xl font-bold mb-1">Malware</h3>
+                      <p className="text-sm text-gray-300">Keamanan sosial</p>
+                    </div>
+                  </div>
 
-        
+                  {/* Produk 3 */}
+                  <div className="w-full bg-white rounded-2xl shadow-xl overflow-hidden transform transition-transform duration-300 hover:scale-105">
+                    <img
+                      src="/produk3.jpg"
+                      alt="test"
+                      className="w-full h-52 sm:h-60 md:h-64 object-cover"
+                    />
+                    <div className="p-4 text-center bg-gradient-to-b from-gray-800 via-gray-900 to-black text-white">
+                      <h3 className="text-xl font-bold mb-1">Produk 3</h3>
+                      <p className="text-sm text-gray-300">Deskripsi singkat produk</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </CarouselItem>
+          </Carousel>
         </div>
-        </section>
+      </section>
 
       {/* Process Timeline Section */}
       <ProcessTimeline />
@@ -529,7 +594,7 @@ export default function LandingPage() {
           >
             {[
               {
-                name: "Sarah Johnson",
+                name: "Dani denis",
                 role: "Marketing Manager",
                 content:
                   "DigitalPro saved me hours of frustration with their quick OS reinstallation. Professional and efficient!",
@@ -565,13 +630,6 @@ export default function LandingPage() {
                       "{testimonial.content}"
                     </p>
                     <div className="flex items-center">
-                      <Image
-                        src={`/placeholder.svg?height=40&width=40`}
-                        alt={testimonial.name}
-                        width={40}
-                        height={40}
-                        className="rounded-full mr-3"
-                      />
                       <div>
                         <p className="font-semibold text-white">
                           {testimonial.name}
@@ -580,6 +638,13 @@ export default function LandingPage() {
                           {testimonial.role}
                         </p>
                       </div>
+                      <Image
+                        src="/clien1.jpeg"
+                        alt="clien1"
+                        width={40}
+                        height={40}
+                        className="rounded-full mr-3 w-10 h-10"
+                      />
                     </div>
                   </CardContent>
                 </Card>
@@ -620,7 +685,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer
         id="contact"
-        className="bg-slate-950 border-t border-slate-800 py-12 px-4 sm:px-6 lg:px-8"
+        className="bg-blue-950 border-t border-slate-800 py-12 px-4 sm:px-6 lg:px-8"
       >
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -744,21 +809,19 @@ export default function LandingPage() {
                 {[1, 2, 3].map((step) => (
                   <div key={step} className="flex items-center">
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                        bookingStep >= step
-                          ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
-                          : "bg-slate-700 text-slate-400"
-                      }`}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${bookingStep >= step
+                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+                        : "bg-slate-700 text-slate-400"
+                        }`}
                     >
                       {step}
                     </div>
                     {step < 3 && (
                       <div
-                        className={`w-12 h-0.5 mx-2 ${
-                          bookingStep > step
-                            ? "bg-gradient-to-r from-blue-600 to-purple-600"
-                            : "bg-slate-700"
-                        }`}
+                        className={`w-12 h-0.5 mx-2 ${bookingStep > step
+                          ? "bg-gradient-to-r from-blue-600 to-purple-600"
+                          : "bg-slate-700"
+                          }`}
                       />
                     )}
                   </div>
@@ -846,11 +909,10 @@ export default function LandingPage() {
                                 key={time}
                                 value={time}
                                 disabled={!!isBooked}
-                                className={`text-white hover:bg-slate-700 ${
-                                  isBooked
-                                    ? "opacity-50 cursor-not-allowed"
-                                    : ""
-                                }`}
+                                className={`text-white hover:bg-slate-700 ${isBooked
+                                  ? "opacity-50 cursor-not-allowed"
+                                  : ""
+                                  }`}
                               >
                                 {time} {isBooked ? "(Booked)" : ""}
                               </SelectItem>
@@ -1072,4 +1134,4 @@ export default function LandingPage() {
       </Dialog>
     </div>
   );
-};
+}
